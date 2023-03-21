@@ -86,12 +86,11 @@ exports.updateBlog = async (req, res, next) => {
       new: true,
       runValidators: true,
     });
-
-    // if (!blog) {
-    //   return next(
-    //     new AppError("No Blog Found With This ID Please Enter correct ID", 404)
-    //   );
-    // }
+    if (!blog) {
+      return next(
+        new AppError("No Blog Found With This ID Please Enter correct ID", 404)
+      );
+    }
     res.status(200).json({
       status: "success",
       data: {
