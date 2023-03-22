@@ -56,6 +56,7 @@ exports.getoneBlog = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.log(error.name);
     return next(new AppError("SomeThing Went wrong", 404));
   }
 };
@@ -75,6 +76,7 @@ exports.deleteBlog = async (req, res, next) => {
       data: null,
     });
   } catch (error) {
+    console.log(error);
     return next(new AppError("SomeThing Went wrong", 404));
   }
 };
@@ -98,6 +100,7 @@ exports.updateBlog = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.log(error);
     return next(new AppError("SomeThing Went wrong", 404));
   }
 };

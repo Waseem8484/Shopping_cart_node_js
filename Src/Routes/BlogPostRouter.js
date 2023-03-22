@@ -4,10 +4,10 @@ const authController = require("./../Controller/authController");
 const Router = express.Router();
 
 Router.route("/Api/blogpost/")
-  .get(blogController.getAllBlog)
-  .post(blogController.createBlog);
+  .get(authController.Protect, blogController.getAllBlog)
+  .post(authController.Protect, blogController.createBlog);
 Router.route("/Api/blogpost/:id")
-  .get(blogController.getoneBlog)
-  .delete(blogController.deleteBlog)
-  .patch(blogController.updateBlog);
+  .get(authController.Protect, blogController.getoneBlog)
+  .delete(authController.Protect, blogController.deleteBlog)
+  .patch(authController.Protect, blogController.updateBlog);
 module.exports = Router;

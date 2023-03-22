@@ -8,6 +8,7 @@ dotenv.config({ path: "./Config.env" });
 app.use(express.json());
 const AppError = require("./Src/Utilis/AppError");
 const globelError = require("./Src/Controller/errorController");
+
 mongoose
   .connect(process.env.data_base, {
     useNewUrlParser: true,
@@ -23,7 +24,8 @@ app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
-app.use(BlogRoute);
+app.use(AuthRoute, BlogRoute);
+// app.use(BlogRoute);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
