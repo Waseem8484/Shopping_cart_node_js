@@ -70,7 +70,7 @@ exports.deleteBlog = async (req, res, next) => {
         new AppError("No Blog Found With This ID Please Enter correct ID", 404)
       );
     }
-    res.status(204).json({
+    res.status(200).json({
       status: "success",
       data: null,
     });
