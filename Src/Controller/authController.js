@@ -1,6 +1,7 @@
 const blogUsers = require("./../Model/AuthModel");
 const express = require("express");
 const AppError = require("../Utilis/AppError");
+const { promisify } = require("util");
 const app = express();
 
 const jwt = require("jsonwebtoken");
@@ -13,7 +14,6 @@ app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
-
 const signInToken = (id) => {
   return jwt.sign({ id }, process.env.secret_code, {
     expiresIn: process.env.expiresIn,
@@ -85,26 +85,37 @@ exports.loginUser = async (req, res, next) => {
 };
 
 exports.Protect = async (req, res, next) => {
-  let tokens;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    tokens = req.headers.authorization.split(" ")[1];
-  }
-  if (!tokens) {
-    return next(
-      new AppError("you cannot loggedin! please login to get acccess", 404)
+  try {
+    let tokens;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      tokens = req.headers.authorization.split(" ")[1];
+    }
+    if (!tokens) {
+      return next(
+        new AppError("you cannot loggedin! please login to get acccess", 404)
+      );
+    }
+    // veryfy token
+    const decoded = await promisify(jwt.verify)(
+      tokens,
+      process.env.secret_code,
+      {
+        complete: true,
+      }
     );
+    console.log("+++++++_______", decoded);
+    const FreshUser = await blogUsers.findById(decoded);
+    if (!FreshUser) {
+      return res.status(401).json({
+        status: "fail",
+        message: "User staill not  exit",
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
-
-  // veryfy token
-  if (tokens) {
-    const decoded = await jwt.verify(tokens, process.env.secret_code);
-    console.log(decoded);
-  }
-
-  // checck if user still exit
-
   next();
 };
