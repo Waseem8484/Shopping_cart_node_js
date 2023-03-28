@@ -10,7 +10,7 @@ const AppError = require("./Src/Utilis/AppError");
 const globelError = require("./Src/Controller/errorController");
 
 mongoose
-  .connect(process.env.data_base, {
+  .connect(process.env.DATA_BASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -24,21 +24,19 @@ app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
-app.use(AuthRoute, BlogRoute);
-// app.use(BlogRoute);
+app.use("/", AuthRoute);
+app.use("/", BlogRoute);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
 });
 
 app.use(globelError);
-const server = app.listen(process.env.port, "127.0.0.1", (res) => {
+const server = app.listen(process.env.PORT, "localhost", (res) => {
   console.log(`App Running on this  port`);
 });
 
 process.on("unhandleRejection", (err) => {
-  console.log(err.name, err.message);
-  console.log("unhandled error rejection down");
   server.close(() => {
     process.exit(1);
   });
