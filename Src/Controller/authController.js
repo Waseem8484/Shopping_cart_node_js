@@ -32,11 +32,6 @@ exports.singUp = async (req, res, next) => {
     if (!password) {
       return next(new AppError("Please Enter Password", 404));
     }
-    const oldUser = await blogUsers.findOne({ email });
-
-    if (oldUser) {
-      return next(new AppError("User Already exit! please login", 404));
-    }
     res.status(201).json({
       status: "Success",
       data: {
