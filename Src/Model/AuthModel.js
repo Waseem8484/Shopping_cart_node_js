@@ -4,23 +4,25 @@ var validator = require("validator");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
-const Bloguserschema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: [true, "Please Provide Valid email"],
-    unique: true,
-    lowercase: true,
-    trim: true,
-
-    validate: validateEmail,
+const Bloguserschema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: [true, "Please Provide Valid email"],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      validate: validateEmail,
+    },
+    password: {
+      type: String,
+      required: [true, "please provide a valid Password"],
+      minLength: 6,
+      select: false,
+    },
   },
-  password: {
-    type: String,
-    required: [true, "please provide a valid Password"],
-    minLength: 6,
-    select: false,
-  },
-});
+  { timestamps: true }
+);
 
 async function validateEmail(email) {
   if (!validator.isEmail(email))
