@@ -1,29 +1,33 @@
 const express = require("express");
-const blogController = require("./../Controller/blogController");
-const authController = require("./../Controller/authController");
-const meassageController = require("./../Controller/messageController");
+const blogController = require("../Controller/blogController");
+const authController = require("../Controller/authController");
+const meassageController = require("../Controller/messageController");
 const Router = express.Router();
 
-Router.route("/reading").get(authController.Protect, blogController.getAllBlog);
-Router.route("/creating").post(
-  authController.Protect,
-  blogController.createBlog
-);
-Router.route("/readingbyid/:id").get(
+Router.get("/readingblog", authController.Protect, blogController.getAllBlog);
+Router.post("/creatingblog", authController.Protect, blogController.createBlog);
+Router.get(
+  "/readingbyidpost/:id",
   authController.Protect,
   blogController.getoneBlog
 );
-Router.route("/deleting/:id").delete(
+Router.delete(
+  "/deletingblog/:id",
   authController.Protect,
   blogController.deleteBlog
 );
-Router.route("/updating/:id").patch(
+Router.patch(
+  "/updatingblog/:id",
   authController.Protect,
   blogController.updateBlog
 );
-
 // message Api
-Router.route("/messagespost").post(meassageController.postmessages);
-Router.route("/messages").get(meassageController.getmessages);
+Router.post(
+  "/messagespost",
+  authController.Protect,
+  meassageController.postmessages
+);
+Router.get("/messages", authController.Protect, meassageController.getmessages);
+Router.get("/qr", meassageController.generateqr);
 
 module.exports = Router;

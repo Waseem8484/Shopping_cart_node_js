@@ -1,4 +1,4 @@
-const blogUsers = require("./../Model/AuthModel");
+const blogUsers = require("../Model/AuthModel");
 const express = require("express");
 const AppError = require("../Utilis/AppError");
 const { promisify } = require("util");
